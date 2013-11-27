@@ -55,28 +55,28 @@ module.exports = function(grunt) {
   };
 
   // compile a template to an angular module
-  var compileTemplate = function(moduleName, filepath, quoteChar, indentString, useStrict, htmlmin) {
+  var compileTemplate = function(moduleName, filepath, quoteChar, indentString, useStrict, htmlmin, cacheService) {
 
     var content = getContent(filepath, quoteChar, indentString, htmlmin);
     var doubleIndent = indentString + indentString;
     var strict = (useStrict) ? indentString + quoteChar + 'use strict' + quoteChar + ';\n' : '';
 
     var module = 'angular.module(' + quoteChar + moduleName +
-      quoteChar + ', []).run([' + quoteChar + '$templateCache' + quoteChar + ', function($templateCache) ' +
-      '{\n' + strict + indentString + '$templateCache.put(' + quoteChar + moduleName + quoteChar + ',\n' + doubleIndent  + quoteChar +  content +
+      quoteChar + ', []).run([' + quoteChar + cacheService + quoteChar + ', function(' + cacheService + ') ' +
+      '{\n' + strict + indentString + cacheService + '.put(' + quoteChar + moduleName + quoteChar + ',\n' + doubleIndent  + quoteChar +  content +
        quoteChar + ');\n}]);\n';
 
     return module;
   };
 
   // compile a template to an angular module
-  var compileCoffeeTemplate = function(moduleName, filepath, quoteChar, indentString, htmlmin) {
+  var compileCoffeeTemplate = function(moduleName, filepath, quoteChar, indentString, htmlmin, cacheService) {
     var content = getContent(filepath, quoteChar, indentString, htmlmin);
     var doubleIndent = indentString + indentString;
 
     var module = 'angular.module(' + quoteChar + moduleName +
-      quoteChar + ', []).run([' + quoteChar + '$templateCache' + quoteChar + ', ($templateCache) ->\n' +
-      indentString + '$templateCache.put(' + quoteChar + moduleName + quoteChar + ',\n' + doubleIndent  + quoteChar +  content +
+      quoteChar + ', []).run([' + quoteChar + cacheService + quoteChar + ', (' + cacheService + ') ->\n' +
+      indentString + cacheService + '.put(' + quoteChar + moduleName + quoteChar + ',\n' + doubleIndent  + quoteChar +  content +
       quoteChar + ')\n])\n';
 
     return module;
@@ -88,6 +88,7 @@ module.exports = function(grunt) {
       base: 'src',
       module: 'templates-' + this.target,
       quoteChar: '"',
+      cacheService: '$templateCache',
       fileHeaderString: '',
       fileFooterString: '',
       indentString: '  ',
@@ -110,9 +111,9 @@ module.exports = function(grunt) {
         }
         moduleNames.push("'" + moduleName + "'");
         if (options.target === 'js') {
-          return compileTemplate(moduleName, filepath, options.quoteChar, options.indentString, options.useStrict, options.htmlmin);
+          return compileTemplate(moduleName, filepath, options.quoteChar, options.indentString, options.useStrict, options.htmlmin, options.cacheService);
         } else if (options.target === 'coffee') {
-          return compileCoffeeTemplate(moduleName, filepath, options.quoteChar, options.indentString, options.htmlmin);
+          return compileCoffeeTemplate(moduleName, filepath, options.quoteChar, options.indentString, options.htmlmin, options.cacheService);
         } else {
           grunt.fail.fatal('Unknow target "' + options.target + '" specified');
         }

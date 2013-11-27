@@ -174,6 +174,18 @@ options: {
 }
 ```
 
+#### cacheService:
+Type: `String`
+Default value: `$templateCache`
+
+Default template service is `$templateCache` to add templates to. However in some
+cases there may be needed to put templates under different template service name.
+Usefull if editing `$templateCache` data on client side.
+
+```
+options: { templateCache: 'customCache' }
+```
+
 ### Usage Examples
 
 See the `Gruntfile.js` in the project source code for various configuration examples.

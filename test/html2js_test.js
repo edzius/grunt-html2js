@@ -221,5 +221,15 @@ exports.html2js = {
       'expected minified template');
 
     test.done();
+  },
+  custom_cache_service: function(test) {
+
+    test.expect(1);
+
+    assertFileContentsEqual(test, 'tmp/custom_cache_service.js',
+      'test/expected/custom_cache_service.js',
+      'expected custom cache service to be used');
+
+    test.done();
   }
 };

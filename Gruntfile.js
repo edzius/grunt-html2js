@@ -185,7 +185,26 @@ module.exports = function(grunt) {
         },
         src: ['test/fixtures/five.tpl.html'],
         dest: 'tmp/htmlmin.js'
+      },
+
+      custom_cache_service_js: {
+        options: {
+          cacheService: 'customCache',
+          target: 'js'
+        },
+        src: ['test/fixtures/one.tpl.html'],
+        dest: 'tmp/custom_cache_service.js'
+      },
+
+      custom_cache_service_coffee: {
+        options: {
+          cacheService: 'customCache',
+          target: 'coffee'
+        },
+        src: ['test/fixtures/one.tpl.html'],
+        dest: 'tmp/custom_cache_service.coffee'
       }
+
     },
 
     // Unit tests.
